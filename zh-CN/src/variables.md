@@ -83,7 +83,7 @@ fn main() {
     let mut x: i32 = 1;
     x = 7;
     // 遮蔽且再次绑定
-    let x = x; 
+    let mut x = x; 
     x += 3;
 
 
@@ -104,7 +104,7 @@ fn main() {
 ```rust,editable
 
 fn main() {
-    let x = 1; 
+    let _x = 1; 
 }
 
 // compiler warning: unused variable: `x`
@@ -119,7 +119,7 @@ fn main() {
 
 // 修复下面代码的错误并尽可能少的修改
 fn main() {
-    let (x, y) = (1, 2);
+    let (mut x, y) = (1, 2);
     x += 2;
 
     assert_eq!(x, 3);
@@ -141,7 +141,7 @@ fn main() {
     (x,..) = (3, 4);
     [.., y] = [1, 2];
     // 填空，让代码工作
-    assert_eq!([x,y], __);
+    assert_eq!([x,y], [3,2]);
 } 
 ```
 
