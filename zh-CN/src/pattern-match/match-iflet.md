@@ -16,10 +16,10 @@ fn main() {
     let dire = Direction::South;
     match dire {
         Direction::East => println!("East"),
-        __  => { // 在这里匹配 South 或 North
+        Direction::South|Direction::North  => { // 在这里匹配 South 或 North
             println!("South or North");
         },
-        _ => println!(__),
+        _ => println!("West"),
     };
 }
 ```
@@ -34,7 +34,10 @@ fn main() {
     //
     // boolean = true => binary = 1
     // boolean = false => binary = 0
-    let binary = __;
+    let binary = match boolean{
+        true=>1,
+        false=>0
+    };
 
     assert_eq!(binary, 1);
 }
@@ -65,15 +68,15 @@ fn main() {
 
 fn show_message(msg: Message) {
     match msg {
-        __ => { // 这里匹配 Message::Move
+        Message::Move{x:a,y:b} => { // 这里匹配 Message::Move
             assert_eq!(a, 1);
             assert_eq!(b, 3);
         },
         Message::ChangeColor(_, g, b) => {
-            assert_eq!(g, __);
-            assert_eq!(b, __);
+            assert_eq!(g, 255);
+            assert_eq!(b, 0);
         }
-        __ => println!("no data in these variants")
+        _ => println!("no data in these variants")
     }
 }
 ```
@@ -89,7 +92,7 @@ fn main() {
 
     // 使用 `matches!` 填空
     for ab in alphabets {
-        assert!(__)
+        assert!(matches!(ab,'a'..='z'|'A'..='Z'|'0'..='9'))
     }
 } 
 ```
@@ -107,7 +110,7 @@ fn main() {
 
     let v = vec![MyEnum::Foo,MyEnum::Bar,MyEnum::Foo];
     for e in v {
-        if e == MyEnum::Foo { // 修复错误，只能修改本行代码
+        if matches!(e,MyEnum::Foo) { // 修复错误，只能修改本行代码
             count += 1;
         }
     }
@@ -124,14 +127,11 @@ fn main() {
 
 fn main() {
     let o = Some(7);
-
+    if let Some(i)=o{
+        println!("This is a really long string and `{:?}`", i);
+    }
     // 移除整个 `match` 语句块，使用 `if let` 替代
-    match o {
-        Some(i) => {
-            println!("This is a really long string and `{:?}`", i);
-        }
-        _ => {}
-    };
+    
 }
 ```
 
@@ -146,7 +146,7 @@ enum Foo {
 fn main() {
     let a = Foo::Bar(1);
 
-    __ {
+    if let Foo::Bar(i)=a {
         println!("foobar 持有的值是: {}", i);
     }
 }
@@ -183,7 +183,7 @@ fn main() {
 fn main() {
     let age = Some(30);
     if let Some(age) = age { // 创建一个新的变量，该变量与之前的 `age` 变量同名
-       assert_eq!(age, Some(30));
+       assert_eq!(age, 30);
     } // 新的 `age` 变量在这里超出作用域
     
     match age {
