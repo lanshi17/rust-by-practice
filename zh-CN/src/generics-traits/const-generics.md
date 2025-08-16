@@ -80,10 +80,10 @@ fn main() {
             data: [1, 2, 3],
         },
         Array {
-            data: [1.0, 2.0, 3.0],
+            data: [1, 2, 3],
         },
         Array {
-            data: [1, 2]
+            data: [1, 2,4]
         }
     ];
 }
@@ -93,7 +93,7 @@ fn main() {
 ```rust,editable
 
 // 填空
-fn print_array<__>(__) {
+fn print_array<T:std::fmt::Debug,const N:usize>(arr:[T;N]) {
     println!("{:?}", arr);
 }
 fn main() {
@@ -122,9 +122,9 @@ where
 fn main() {
     check_size([0u8; 767]); 
     check_size([0i32; 191]);
-    check_size(["hello你好"; __]); // size of &str ?
-    check_size([(); __].map(|_| "hello你好".to_string()));  // size of String?
-    check_size(['中'; __]); // size of char ?
+    check_size(["hello你好"; 47]); // size of &str ? 47*16<768
+    check_size([(); 31].map(|_| "hello你好".to_string()));  // size of String? 31*24<768
+    check_size(['中'; 191]); // size of char ? 
 }
 
 

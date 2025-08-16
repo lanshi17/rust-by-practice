@@ -19,15 +19,15 @@ fn generic<T>(_s: SGen<T>) {}
 
 fn main() {
     // 使用非泛型函数
-    reg_fn(__);          // 具体的类型
-    gen_spec_t(__);   // 隐式地指定类型参数  `A`.
-    gen_spec_i32(__); // 隐式地指定类型参数`i32`.
+    reg_fn(S(A));          // 具体的类型
+    gen_spec_t(SGen(A));   // 隐式地指定类型参数  `A`.
+    gen_spec_i32(SGen(6)); // 隐式地指定类型参数`i32`.
 
     // 显式地指定类型参数 `char`
-    generic::<char>(__);
+    generic::<char>(SGen('a'));
 
     // 隐式地指定类型参数 `char`.
-    generic(__);
+    generic(SGen('a'));
 }
 ```
 
@@ -35,7 +35,9 @@ fn main() {
 ```rust,editable
 
 // 实现下面的泛型函数 sum
-fn sum
+fn sum<T:std::ops::Add<Output=T>>(x:T,y:T)->T{
+    x+y
+}
 
 fn main() {
     assert_eq!(5, sum(2i8, 3i8));
@@ -51,6 +53,10 @@ fn main() {
 ```rust,editable
 
 // 实现一个结构体 Point 让代码工作
+struct Point<T>{
+    x:T,
+    y:T,
+}
 
 
 fn main() {
@@ -63,9 +69,9 @@ fn main() {
 ```rust,editable
 
 // 修改以下结构体让代码工作
-struct Point<T> {
+struct Point<T,U> {
     x: T,
-    y: T,
+    y: U,
 }
 
 fn main() {
@@ -78,12 +84,12 @@ fn main() {
 ```rust,editable
 
 // 为 Val 增加泛型参数，不要修改 `main` 中的代码
-struct Val {
-    val: f64,
+struct Val<T> {
+    val: T,
 }
 
-impl Val {
-    fn value(&self) -> &f64 {
+impl<T> Val<T> {
+    fn value(&self) -> &T {
         &self.val
     }
 }
@@ -107,7 +113,12 @@ struct Point<T, U> {
 
 impl<T, U> Point<T, U> {
     // 实现 mixup，不要修改其它代码！
-    fn mixup
+    fn mixup<V,W>(self,other:Point<V,W>)->Point<T,W>{
+        Point{
+            x:self.x,
+            y:other.y,
+        }
+    }
 }
 
 fn main() {
@@ -137,7 +148,7 @@ impl Point<f32> {
 }
 
 fn main() {
-    let p = Point{x: 5, y: 10};
+    let p = Point{x: 5f32, y: 10f32};
     println!("{}",p.distance_from_origin())
 }
 ```
