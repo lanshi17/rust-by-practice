@@ -93,9 +93,19 @@ trait Hello {
 
 struct Student {}
 impl Hello for Student {
+    fn say_something(&self) -> String{
+        String::from("I'm a good student")
+    }
 }
 struct Teacher {}
 impl Hello for Teacher {
+    fn say_hi(&self) -> String {
+        String::from("Hi, I'm your new teacher")
+    }
+    fn say_something(&self) -> String{
+        String::from("I'm not a bad teacher")
+    }
+
 }
 
 fn main() {
@@ -137,6 +147,7 @@ impl Inches {
 
 // 添加一些属性让代码工作
 // 不要修改其它代码！
+#derive(Debug,PartialEq,PartialOrd)
 struct Seconds(i32);
 
 fn main() {
@@ -175,7 +186,9 @@ use std::ops;
 // 实现 fn multiply 方法
 // 如上所述，`+` 需要 `T` 类型实现 `std::ops::Add` 特征
 // 那么, `*` 运算符需要实现什么特征呢? 你可以在这里找到答案: https://doc.rust-lang.org/core/ops/
-fn multiply
+fn multiply<T:std::ops::Mul<Output=T>>(a:T,b:T){
+    a*b
+}
 
 fn main() {
     assert_eq!(6, multiply(2u8, 3u8));
@@ -193,9 +206,9 @@ use std::ops;
 
 struct Foo;
 struct Bar;
-
+#derive(PartialEq,PartialOrd)
 struct FooBar;
-
+#derive(PartialEq,PartialOrd)
 struct BarFoo;
 
 // 下面的代码实现了自定义类型的相加： Foo + Bar = FooBar
@@ -207,10 +220,10 @@ impl ops::Add<Bar> for Foo {
     }
 }
 
-impl ops::Sub<Foo> for Bar {
+impl ops::Sub<Bar> for Foo {
     type Output = BarFoo;
 
-    fn sub(self, _rhs: Foo) -> BarFoo {
+    fn sub(self, _rhs: Bar) -> BarFoo {
         BarFoo
     }
 }
