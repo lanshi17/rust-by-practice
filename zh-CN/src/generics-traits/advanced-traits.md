@@ -21,13 +21,17 @@ struct Container(i32, i32);
 //    type A;
 //    type B;
 
-trait Contains<A, B> {
-    fn contains(&self, _: &A, _: &B) -> bool;
+trait Contains {
+    type A;
+    type B;
+    fn contains(&self, _: &Self::A, _: &Self::B) -> bool;
     fn first(&self) -> i32;
     fn last(&self) -> i32;
 }
 
-impl Contains<i32, i32> for Container {
+impl Contains for Container {
+    type A=i32;
+    type B=i32;
     fn contains(&self, number_1: &i32, number_2: &i32) -> bool {
         (&self.0 == number_1) && (&self.1 == number_2)
     }
@@ -38,7 +42,7 @@ impl Contains<i32, i32> for Container {
     fn last(&self) -> i32 { self.1 }
 }
 
-fn difference<A, B, C: Contains<A, B>>(container: &C) -> i32 {
+fn difference<C: Contains>(container: &C) -> i32 {
     container.last() - container.first()
 }
 
@@ -73,7 +77,7 @@ struct Point<T> {
 }
 
 // 用三种方法填空: 其中两种使用默认的泛型参数，另外一种不使用
-impl __ {
+impl <T:Sub<Output=T>> Sub<Self> for Point{T} {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self::Output {
@@ -177,10 +181,10 @@ impl Human {
 fn main() {
     let person = Human;
 
-    assert_eq!(__, "This is your captain speaking.");
-    assert_eq!(__, "Up!");
+    assert_eq!(Pilot::fly(&person), "This is your captain speaking.");
+    assert_eq!(Wizard::fly(&person), "Up!");
 
-    assert_eq!(__, "*waving arms furiously*");
+    assert_eq!(person.fly(), "*waving arms furiously*");
 
     println!("Success!")
 }
@@ -230,7 +234,26 @@ struct CSStudent {
 }
 
 // 为 CSStudent 实现所需的特征
-impl ...
+impl Person for CSStudent{
+    fn name(&self) -> String{
+        self.name.clone()
+    }
+}
+impl Student for CSStudent{
+    fn university(&self) -> String{
+        self.university.clone()
+    }
+}
+impl Programmer for CSStudent{
+    fn fav_language(&self) -> String{
+        self.fav_language.clone()
+    }
+}
+impl CompSciStudent for CSStudent{
+    fn git_username(&self) -> String{
+        self.git_username.clone()
+    }
+}
 
 fn main() {
     let student = CSStudent {
@@ -254,7 +277,7 @@ fn main() {
 use std::fmt;
 
 // 定义一个 newtype `Pretty`
-
+struct Pretty(String)
 
 impl fmt::Display for Pretty {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
