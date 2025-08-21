@@ -13,14 +13,14 @@ fn drink(beverage: &str) {
     if beverage == "lemonade" {
         println!("Success!");
         // 实现下面的代码
-        __
+        panic("Ok")
      }
 
     println!("Exercise Failed if printing out this line!");
 }
 
 fn main() {
-    drink(__);
+    drink("lemonade");
 
     println!("Exercise Failed if printing out this line!");
 }
@@ -31,16 +31,16 @@ fn main() {
 ```rust,editable
 // 修复所有的 panic，让代码工作
 fn main() {
-    assert_eq!("abc".as_bytes(), [96, 97, 98]);
+    assert_eq!("abc".as_bytes(), [97, 98, 99]);
 
     let v = vec![1, 2, 3];
-    let ele = v[3];
-    let ele = v.get(3).unwrap();
+    let ele = v[2];
+    let ele = v.get(2).unwrap();
 
     // 大部分时候编译器是可以帮我们提前发现溢出错误，并阻止编译通过。但是也有一些时候，这种溢出问题直到运行期才会出现
     let v = production_rate_per_hour(2);
 
-    divide(15, 0);
+    divide(15, 1);
 
     println!("Success!")
 }
@@ -50,7 +50,7 @@ fn divide(x:u8, y:u8) {
 }
 
 fn production_rate_per_hour(speed: u8) -> f64 {
-    let cph: u8 = 221;
+    let cph: u8 = 21;
     match speed {
         1..=4 => (speed * cph) as f64,
         5..=8 => (speed * cph) as f64 * 0.9,
@@ -77,7 +77,7 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```shell
 ## 填空以打印全部的调用栈
 ## 提示: 你可以在之前的默认 panic 信息中找到相关线索
-$ __ cargo run
+$env:RUST_BACKTRACE=1 ; cargo run 
 thread 'main' panicked at 'assertion failed: `(left == right)`
   left: `[97, 98, 99]`,
  right: `[96, 97, 98]`', src/main.rs:3:5

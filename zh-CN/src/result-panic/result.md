@@ -13,7 +13,7 @@
 // 填空并修复错误
 use std::num::ParseIntError;
 
-fn multiply(n1_str: &str, n2_str: &str) -> __ {
+fn multiply(n1_str: &str, n2_str: &str) -> Result<i32,ParseIntError>{
     let n1 = n1_str.parse::<i32>();
     let n2 = n2_str.parse::<i32>();
     Ok(n1.unwrap() * n2.unwrap())
@@ -21,10 +21,10 @@ fn multiply(n1_str: &str, n2_str: &str) -> __ {
 
 fn main() {
     let result = multiply("10", "2");
-    assert_eq!(result, __);
+    assert_eq!(result, 20);
 
-    let result = multiply("t", "2");
-    assert_eq!(result.__, 8);
+    let result = multiply("4", "2");
+    assert_eq!(result.unwrap(), 8);
 
     println!("Success!")
 }
@@ -40,7 +40,10 @@ use std::num::ParseIntError;
 
 // 使用 `?` 来实现 multiply
 // 不要使用 unwrap !
-fn multiply(n1_str: &str, n2_str: &str) -> __ {
+fn multiply(n1_str: &str, n2_str: &str) -> Result<i32,ParseIntError> {
+    let a=n1_str.parse::<i32>()?;
+    let b=n2_str.parse::<i32>()?;
+    a*b
 }
 
 fn main() {
@@ -74,7 +77,7 @@ fn read_file1() -> Result<String, io::Error> {
 fn read_file2() -> Result<String, io::Error> {
     let mut s = String::new();
 
-    __;
+    File::open("hello.txt")?.read_to_string(&mut s)?;
 
     Ok(s)
 }
@@ -95,7 +98,7 @@ use std::num::ParseIntError;
 
 // 使用两种方式填空: map, and then
 fn add_two(n_str: &str) -> Result<i32, ParseIntError> {
-   n_str.parse::<i32>().__
+   n_str.parse::<i32>().map(|x|x+2)
 }
 
 fn main() {
@@ -128,7 +131,9 @@ fn multiply(n1_str: &str, n2_str: &str) -> Result<i32, ParseIntError> {
 // 重写上面的 `multiply` ，让它尽量简洁
 // 提示：使用 `and_then` 和 `map`
 fn multiply1(n1_str: &str, n2_str: &str) -> Result<i32, ParseIntError> {
-    // 实现...
+    n1_str.parse::<i32>().and_then(|n1|{
+        n2_str.parse:<i32>().map(|n2|n1*n2)
+    })
 }
 
 fn print(result: Result<i32, ParseIntError>) {
@@ -160,7 +165,7 @@ fn main() {
 use std::num::ParseIntError;
 
 // 填空
-type __;
+type Res<T>=Result<T,ParseIntError>;
 
 // 使用上面的别名来引用原来的 `Result` 类型
 fn multiply(first_number_str: &str, second_number_str: &str) -> Res<i32> {
