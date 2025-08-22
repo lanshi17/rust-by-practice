@@ -29,10 +29,23 @@
 
 ```rust,editable
 // 填空
-// in __.rs
-
+// in lib.rs
 mod front_of_house {
-    // 实现此模块
+    mod hosting {
+        fn add_to_waitlist() {}
+
+        fn seat_at_table() {}
+    }
+
+    mod serving {
+        fn take_order() {}
+
+        fn serve_order() {}
+
+        fn take_payment() {}
+
+        fn complain() {}
+    }
 }
 ```
 
@@ -46,15 +59,31 @@ mod front_of_house {
 
 // 提示：你需要通过 `pub` 将一些项标记为公有的，这样模块 `front_of_house` 中的项才能被模块外的项访问
 mod front_of_house {
-    /* ...snip... */
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+
+        pub fn seat_at_table() {}
+    }
+
+    pub mod serving {
+        pub fn take_order() {}
+
+        pub fn serve_order() {}
+
+        pub fn take_payment() {}
+
+        // Maybe you don't want the guest hearing the your complaining about them
+        // So just make it private
+        fn complain() {}
+    }
 }
 
 pub fn eat_at_restaurant() {
     // 使用绝对路径调用
-    __.add_to_waitlist();
+    crate::front_of_house::hosting::add_to_waitlist();
 
     // 使用相对路径调用
-     __.add_to_waitlist();
+     front_of_house::hosting::add_to_waitlist();
 }
 ```
 
@@ -68,7 +97,7 @@ mod back_of_house {
         // 使用三种方式填空
         //1. 使用关键字 `super`
         //2. 使用绝对路径
-        __.serve_order();
+        super::front_of_house::serving::serve_order();
     }
 
     fn cook_order() {}
@@ -135,32 +164,57 @@ pub mod back_of_house {
 ```rust,editable
 // in src/lib.rs
 
-// IMPLEMENT...
+pub mod front_of_house;
+pub mod back_of_house;
+pub fn eat_at_restaurant() -> String {
+    front_of_house::hosting::add_to_waitlist();
+    
+    back_of_house::cook_order();
+
+    String::from("yummy yummy!")
+}
 ```
 
 ```rust,editable
 // in src/back_of_house.rs
 
-// IMPLEMENT...
+use crate::front_of_house;
+pub fn fix_incorrect_order() {
+    cook_order();
+    front_of_house::serving::serve_order();
+}
+
+pub fn cook_order() {}
 ```
 
 
 ```rust,editable
 // in src/front_of_house/mod.rs
 
-// IMPLEMENT...
+pub mod hosting;
+pub mod serving;
 ```
 
 ```rust,editable
 // in src/front_of_house/hosting.rs
 
-// IMPLEMENT...
+pub fn add_to_waitlist() {}
+
+pub fn seat_at_table() -> String {
+    String::from("sit down please")
+}
 ```
 
 ```rust,editable
 // in src/front_of_house/serving.rs
 
-// IMPLEMENT...
+pub fn take_order() {}
+
+pub fn serve_order() {}
+
+pub fn take_payment() {}
+
+fn complain() {}
 ```
 
 ### 从二进制包中访问库包的代码
@@ -187,8 +241,8 @@ pub mod back_of_house {
 
 // 填空并修复错误
 fn main() {
-    assert_eq!(__, "sit down please");
-    assert_eq!(__,"yummy yummy!");
+    assert_eq!(crate::front_of_house::hosting::seat_at_table, "sit down please");
+    assert_eq!(crate::eat_at_restaurant(),"yummy yummy!");
 }
 ```
 

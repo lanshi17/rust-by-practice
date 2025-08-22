@@ -3,7 +3,7 @@
 
 ```rust,editable
 use std::fmt::Result;
-use std::io::Result;
+use std::io::Result as IoResult;
 
 fn main() {}
 ```
@@ -14,7 +14,7 @@ fn main() {}
 
 // 使用两种方式填空
 // 不要添加新的代码行
-use std::collections::__;
+use std::collections::{HashMap,BTreeMap,HashSet};
 
 fn main() {
     let _c1:HashMap<&str, i32> = HashMap::new();
@@ -28,6 +28,7 @@ fn main() {
 
 3. 🌟🌟🌟 在之前创建的`hello-package` 的库包中, 添加一些代码让下面的代码能够正常工作
 ```rust,editable
+pub use crate::front_of_house::hosting;
 fn main() {
     assert_eq!(hello_package::hosting::seat_at_table(), "sit down please");
      assert_eq!(hello_package::eat_at_restaurant(),"yummy yummy!");
